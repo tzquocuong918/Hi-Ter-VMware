@@ -5,14 +5,14 @@ provider_vsphere_password = "Nutanix/4u"
 
 # Infrastructure
 deploy_vsphere_datacenter = "CSC-Gara"
-deploy_vsphere_cluster    = "DELL-MORPHEUS"
-deploy_vsphere_datastore  = "esxi-dell01-datastore"
+deploy_vsphere_cluster    = "Gara-Cluster"
+deploy_vsphere_datastore  = "esxi-hpe01-datastore-ext"
 deploy_vsphere_folder     = "/CuongDQ"
 deploy_vsphere_network    = "VM Network"
 
 # Guest
 guest_name_prefix     = "k8s-prod"
-guest_template        = "Ubuntu-18.04"
+guest_template        = "ubuntu-18.04.6-live-server-amd64"
 guest_vcpu            = "1"
 guest_memory          = "2048"
 guest_ipv4_netmask    = "24"
