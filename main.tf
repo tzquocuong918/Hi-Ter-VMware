@@ -4,7 +4,7 @@ terraform {
   required_providers {
     vsphere = {
       source  = "hashicorp/vsphere"
-      # version = "1.24.3"
+      version = "2.2.0"
     }
   }
 }
@@ -91,37 +91,35 @@ resource "vsphere_virtual_machine" "kubernetes_master" {
   boot_delay = 10000
 
   # # Remove existing SSH known hosts as remote identification (host key) changes between deployments.
-  # provisioner "local-exec" {
-  #   command = "ssh-keygen -R ${self.guest_ip_addresses[0]}"
-  # }
-
-  # Ansible requires Python to be installed on the remote machines (as well as the local machine).
-  provisioner "remote-exec" {
-    inline = ["sudo apt-get update && sudo apt-get -qq install python -y"]
-
-    connection {
-      type     = "ssh"
-      user     = var.guest_ssh_user
-      password = var.guest_ssh_password
-      host     = self.guest_ip_addresses[0]
-    }
+  provisioner "local-exec" {
+    command = "ssh-keygen -R ${self.guest_ip_addresses[0]}"
   }
 
+  # Ansible requires Python to be installed on the remote machines (as well as the local machine).
+
+  connection {
+    type     = "ssh"
+    user     = var.guest_ssh_user
+    password = var.guest_ssh_password
+    host     = self.guest_ip_addresses[0]
+  }
+  # provisioner "remote-exec" {
+  #   inline = ["sudo apt-get update && sudo apt-get -qq install python -y && sudo apt install ansible -y"]
+  # }
   # Disabling SSH authenticity checking StrictHostKeyChecking=no, to avoid beeing asked to add RSA key fingerprint of a host when you access it for the first time.
   # provisioner "local-exec" {
   #   command = "sshpass -p ${var.guest_ssh_password} ssh-copy-id -i ${var.guest_ssh_key_public} -o StrictHostKeyChecking=no ${var.guest_ssh_user}@${self.guest_ip_addresses[0]}"
   # }
 
   # Prepare operating system for kubernetes using Ansible
-  #provisioner "local-exec" {
+  # provisioner "local-exec" {
   #  command = "ansible-playbook -i '${self.guest_ip_addresses[0]},' --private-key ${var.guest_ssh_key_private} ../ansible/k8s-preparation.yml"
-  #}
+  # }
 
   lifecycle {
     ignore_changes = [annotation]
   }
 }
-
 # Clones multiple Linux VMs from a template
 resource "vsphere_virtual_machine" "kubernetes_workers" {
   count            = length(var.worker_ips)
@@ -171,20 +169,19 @@ resource "vsphere_virtual_machine" "kubernetes_workers" {
   boot_delay = 10000
 
   # Remove existing SSH known hosts as remote identification (host key) changes between deployments.
-  # provisioner "local-exec" {
-  #   command = "ssh-keygen -R ${self.guest_ip_addresses[0]}"
-  # }
+  provisioner "local-exec" {
+    command = "ssh-keygen -R ${self.guest_ip_addresses[0]}"
+  }
 
   # Ansible requires Python to be installed on the remote machines (as well as the local machine).
-  provisioner "remote-exec" {
-    inline = ["sudo apt-get update && sudo apt-get -qq install python -y"]
-
     connection {
       type     = "ssh"
       user     = var.guest_ssh_user
       password = var.guest_ssh_password
       host     = self.guest_ip_addresses[0]
     }
+    provisioner "remote-exec" {
+      inline = ["sudo apt-get update && sudo apt-get -qq install python -y && sudo apt install ansible -y"]
   }
 
   # Disabling SSH authenticity checking StrictHostKeyChecking=no, to avoid beeing asked to add RSA key fingerprint of a host when you access it for the first time.
@@ -193,9 +190,9 @@ resource "vsphere_virtual_machine" "kubernetes_workers" {
   # }
 
   # Prepare operating system for kubernetes using Ansible
-  #provisioner "local-exec" {
+  # provisioner "local-exec" {
   #  command = "ansible-playbook -i '${self.guest_ip_addresses[0]},' --private-key ${var.guest_ssh_key_private} ../ansible/k8s-preparation.yml"
-  #}
+  # }
 
   lifecycle {
     ignore_changes = [annotation]
