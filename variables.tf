@@ -94,16 +94,10 @@ variable "guest_ssh_key_public" {
   description = "SSH public key (e.g., id_rsa.pub) path."
 }
 
-##### Master(s)
-# - Describes master(s) nodes options
-
 variable "master_ips" {
   type        = map(any)
   description = "List of IPs used for the kubernetes master nodes. 1 IP for a single master, or 3 for a multi-master configuration."
 }
-
-##### Worker(s)
-# - Describes workers(s) nodes (a.k.a., minions) options
 
 variable "worker_ips" {
   type        = map(any)
