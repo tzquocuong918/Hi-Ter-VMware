@@ -4,7 +4,7 @@ terraform {
   required_providers {
     vsphere = {
       source  = "hashicorp/vsphere"
-#       version = "2.2.0"
+      version = "2.2.0"
     }
   }
 }
@@ -78,8 +78,8 @@ resource "vsphere_virtual_machine" "kubernetes_master" {
       }
 
       network_interface {
-        # ipv4_address = lookup(var.master_ips, count.index)
-        # ipv4_netmask = var.guest_ipv4_netmask
+        ipv4_address = lookup(var.master_ips, count.index)
+        ipv4_netmask = var.guest_ipv4_netmask
       }
 
       ipv4_gateway    = var.guest_ipv4_gateway
@@ -91,18 +91,18 @@ resource "vsphere_virtual_machine" "kubernetes_master" {
   boot_delay = 10000
 
   # # Remove existing SSH known hosts as remote identification (host key) changes between deployments.
-  provisioner "local-exec" {
-    command = "ssh-keygen -R ${self.guest_ip_addresses[0]}"
-  }
+  # provisioner "local-exec" {
+  #   command = "ssh-keygen -R ${self.guest_ip_addresses[0]}"
+  # }
 
   # Ansible requires Python to be installed on the remote machines (as well as the local machine).
 
-  connection {
-    type     = "ssh"
-    user     = var.guest_ssh_user
-    password = var.guest_ssh_password
-    host     = self.guest_ip_addresses[0]
-  }
+  # connection {
+  #   type     = "ssh"
+  #   user     = var.guest_ssh_user
+  #   password = var.guest_ssh_password
+  #   host     = self.guest_ip_addresses[0]
+  # }
   # provisioner "remote-exec" {
   #   inline = ["sudo apt-get update && sudo apt-get -qq install python -y && sudo apt install ansible -y"]
   # }
@@ -156,8 +156,8 @@ resource "vsphere_virtual_machine" "kubernetes_workers" {
       }
 
       network_interface {
-        # ipv4_address = lookup(var.worker_ips, count.index)
-        # ipv4_netmask = var.guest_ipv4_netmask
+        ipv4_address = lookup(var.worker_ips, count.index)
+        ipv4_netmask = var.guest_ipv4_netmask
       }
 
       ipv4_gateway    = var.guest_ipv4_gateway
@@ -169,20 +169,20 @@ resource "vsphere_virtual_machine" "kubernetes_workers" {
   boot_delay = 10000
 
   # Remove existing SSH known hosts as remote identification (host key) changes between deployments.
-  provisioner "local-exec" {
-    command = "ssh-keygen -R ${self.guest_ip_addresses[0]}"
-  }
+  # provisioner "local-exec" {
+  #   command = "ssh-keygen -R ${self.guest_ip_addresses[0]}"
+  # }
 
-  # Ansible requires Python to be installed on the remote machines (as well as the local machine).
-    connection {
-      type     = "ssh"
-      user     = var.guest_ssh_user
-      password = var.guest_ssh_password
-      host     = self.guest_ip_addresses[0]
-    }
-    provisioner "remote-exec" {
-      inline = ["sudo apt-get update && sudo apt-get -qq install python -y && sudo apt install ansible -y"]
-  }
+  # # Ansible requires Python to be installed on the remote machines (as well as the local machine).
+  #   connection {
+  #     type     = "ssh"
+  #     user     = var.guest_ssh_user
+  #     password = var.guest_ssh_password
+  #     host     = self.guest_ip_addresses[0]
+  #   }
+  #   provisioner "remote-exec" {
+  #     inline = ["sudo apt-get update && sudo apt-get -qq install python -y && sudo apt install ansible -y"]
+  # }
 
   # Disabling SSH authenticity checking StrictHostKeyChecking=no, to avoid beeing asked to add RSA key fingerprint of a host when you access it for the first time.
   # provisioner "local-exec" {
