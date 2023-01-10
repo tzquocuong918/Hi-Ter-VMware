@@ -5,7 +5,7 @@ provider_vsphere_password = "Nutanix/4u"
 
 # Infrastructure
 deploy_vsphere_datacenter = "CSC-Gara"
-deploy_vsphere_cluster    = "Production-Cluster"
+deploy_vsphere_cluster    = "Product-Cluster"
 deploy_vsphere_datastore  = "esxi-hpe01-datastore-ext"
 deploy_vsphere_folder     = "/CuongDQ"
 deploy_vsphere_network    = "VM Network"
