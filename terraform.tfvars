@@ -8,7 +8,7 @@ deploy_vsphere_datacenter = "CSC-Gara"
 deploy_vsphere_cluster    = "Product-Cluster"
 deploy_vsphere_datastore  = "esxi-hpe01-datastore-ext"
 deploy_vsphere_folder     = "/CuongDQ"
-deploy_vsphere_network    = "VM Network"
+deploy_vsphere_network    = "Cloudian Backend"
 
 # Guest
 guest_name_prefix     = "k8s-prod"
