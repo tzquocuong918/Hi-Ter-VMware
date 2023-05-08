@@ -8,7 +8,7 @@ deploy_vsphere_datacenter = "CSC-Gara"
 deploy_vsphere_cluster    = "Product-Cluster"
 deploy_vsphere_datastore  = "esxi-hpe01-datastore-ext"
 deploy_vsphere_folder     = "/CuongDQ"
-deploy_vsphere_network    = "Cloudian Backend"
+deploy_vsphere_network    = "VLAN2"
 
 # Guest
 guest_name_prefix     = "k8s-prod"
@@ -29,12 +29,10 @@ guest_ssh_key_public  = "~/.ssh/id_rsa.pub"
 master_ips = {
   "0" = "192.168.1.60"
   "1" = "192.168.1.61"
-  "2" = "192.168.1.62"
 }
 
 # # Worker(s)
 worker_ips = {
   "0" = "192.168.1.63"
   "1" = "192.168.1.64"
-  "2" = "192.168.1.65"
 }
